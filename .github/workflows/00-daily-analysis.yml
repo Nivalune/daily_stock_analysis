@@ -462,6 +462,11 @@ jobs:
 
           # 判断运行模式
           MODE="${{ github.event.inputs.mode || 'full' }}"
+          # 未配置 STOCK_LIST 时自动降级为仅大盘复盘，避免空自选股触发无效的个股分析
+          if [ -z "${STOCK_LIST:-}" ] && [ "$MODE" = "full" ]; then
+            MODE="market-only"
+            echo "ℹ️ 未配置 STOCK_LIST，自动切换为仅大盘复盘"
+          fi
           
           echo "=========================================="
           echo "🚀 A股自选股智能分析系统"
